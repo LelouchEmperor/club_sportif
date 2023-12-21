@@ -1,0 +1,5 @@
+https://cours.davidannebicque.fr/symfony/semestre-3/seance-4-modeles-entites-orm
+
+commande : 
+composer require symfony/orm-pack
+composer require symfony/maker-bundle --dev
