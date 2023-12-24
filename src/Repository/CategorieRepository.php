@@ -21,6 +21,17 @@ class CategorieRepository extends ServiceEntityRepository
         parent::__construct($registry, Categorie::class);
     }
 
+    public function save(Categorie $categorie)
+    {
+        $this->_em->persist($categorie);
+        $this->_em->flush();
+    }
+
+    public function delete(Categorie $categorie)
+    {
+        $this->_em->remove($categorie);
+        $this->_em->flush();
+    }
 //    /**
 //     * @return Categorie[] Returns an array of Categorie objects
 //     */
