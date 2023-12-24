@@ -7,3 +7,67 @@ controllers:
 index:
 path: /
 controller: App\Controller\TestController::index
+
+licencie:
+    path: '/licencie'
+    controller: 'App\Controller\LicencieController::listLicencies'
+
+licencie_create:
+    path: '/licencie/create'
+    controller: 'App\Controller\LicencieController::createLicencie'
+
+licencie_edit:
+    path: '/licencie/{id}/edit'
+    controller: 'App\Controller\LicencieController::editLicencie'
+
+licencie_delete:
+    path: '/licencie/{id}/delete'
+    controller: 'App\Controller\LicencieController::deleteLicencie'
+
+educateur:
+    path: '/educateur'
+    controller: 'App\Controller\EducateurController::listEducateurs'
+
+educateur_create:
+    path: '/educateur/create'
+    controller: 'App\Controller\EducateurController::createEducateur'
+
+educateur_edit:
+    path: '/educateur/{id}/edit'
+    controller: 'App\Controller\EducateurController::editEducateur'
+
+educateur_delete:
+    path: '/educateur/{id}/delete'
+    controller: 'App\Controller\EducateurController::deleteEducateur'
+
+    categorie:
+    path: '/categorie'
+    controller: 'App\Controller\CategorieController::listCategories'
+
+categorie_create:
+    path: '/categorie/create'
+    controller: 'App\Controller\CategorieController::createCategorie'
+
+categorie_edit:
+    path: '/categorie/{id}/edit'
+    controller: 'App\Controller\CategorieController::editCategorie'
+
+categorie_delete:
+    path: '/categorie/{id}/delete'
+    controller: 'App\Controller\CategorieController::deleteCategorie'
+
+contact:
+    path: '/contact'
+    controller: 'App\Controller\ContactController::listContacts'
+
+contact_create:
+    path: '/contact/create'
+    controller: 'App\Controller\ContactController::createContact'
+
+contact_edit:
+    path: '/contact/{id}/edit'
+    controller: 'App\Controller\ContactController::editContact'
+
+contact_delete:
+    path: '/contact/{id}/delete'
+    controller: 'App\Controller\ContactController::deleteContact'
