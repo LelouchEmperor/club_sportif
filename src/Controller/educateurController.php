@@ -1,6 +1,6 @@
-<?php
+<?php 
 
-class contactController extends Controller
+class educateurController extends Controller
 {
     public function index()
     {
