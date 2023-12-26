@@ -1,0 +1,41 @@
+{# templates/Licencie/list.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Licenciés{% endblock %}
+
+{% block body %}
+    <h1>Liste des Licenciés</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Numéro de licence</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Contact</th>
+                <th>Catégorie</th>
+                <th>Éducateur</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for licencie in licencies %}
+                <tr>
+                    <td>{{ licencie.numeroLicence }}</td>
+                    <td>{{ licencie.nom }}</td>
+                    <td>{{ licencie.prenom }}</td>
+                    <td>{{ licencie.contact }}</td>
+                    <td>{{ licencie.categorie }}</td>
+                    <td>{{ licencie.educateur }}</td>
+                    <td>
+                        <a href="{{ path('licencie_edit', {'id': licencie.id}) }}">Modifier</a>
+                        <a href="{{ path('licencie_delete', {'id': licencie.id}) }}">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('licencie_create') }}">Créer un Licencié</a>
+{% endblock %}

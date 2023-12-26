@@ -1,0 +1,23 @@
+{% block title %}Créer un Éducateur{% endblock %}
+
+{% block body %}
+    <h1>Créer un Éducateur</h1>
+
+    {# Le formulaire pour créer un éducateur #}
+    <form method="post" action="{{ path('creer_educateur') }}">
+        {{ form_start(form) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.prenom) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.telephone) }}
+        {{ form_row(form.motDePasse) }}
+        {{ form_row(form.estAdministrateur) }}
+
+        {# Le bouton pour soumettre le formulaire #}
+        <button type="submit">Créer l'Éducateur</button>
+        {{ form_end(form) }}
+
+        {# Le bouton pour revenir à la liste des éducateurs #}
+        <a href="{{ path('Educateur/list') }}">Retour à la liste des Éducateurs</a>
+    </form>
+{% endblock %}

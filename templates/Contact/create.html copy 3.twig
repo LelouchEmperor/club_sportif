@@ -1,0 +1,21 @@
+{% block title %}Créer un Contact{% endblock %}
+
+{% block body %}
+    <h1>Créer un Contact</h1>
+
+    {# Le formulaire pour créer un contact #}
+    <form method="post" action="{{ path('creer_contact') }}">
+        {{ form_start(form) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.prenom) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.telephone) }}
+
+        {# Le bouton pour soumettre le formulaire #}
+        <button type="submit">Créer le Contact</button>
+        {{ form_end(form) }}
+
+        {# Le bouton pour revenir à la liste des contacts #}
+        <a href="{{ path('Contact/list') }}">Retour à la liste des Contacts</a>
+    </form>
+{% endblock %}

@@ -1,11 +1,15 @@
 <?php
 
+namespace App\Controller;
+
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Categorie;
 
+class CategorieController extends AbstractController {
 
-class CategorieController extends Controller {
     public function createCategorie($nom, $codeRaccourci) {
         // Faudra regarder si les paramètres sont bien renseignés et correctes
 
@@ -24,7 +28,7 @@ class CategorieController extends Controller {
         $entityManager->flush();
 
         // Redirection vers la liste des catégories 
-        return $this->redirectToRoute('liste_categories');
+        return $this->redirectToRoute('Categorie/list.html.twig');
     }
 
 
@@ -48,7 +52,7 @@ class CategorieController extends Controller {
         $entityManager->flush();
 
         // Redirection vers la liste des catégories 
-        return $this->redirectToRoute('liste_categories');
+        return $this->redirectToRoute('Categorie/list.html.twig');
     }
 
     public function deleteCategorie($id) {
@@ -66,17 +70,18 @@ class CategorieController extends Controller {
         $entityManager->flush();
 
         // Redirection vers la liste des catégories (ou autre action appropriée)
-        return $this->redirectToRoute('liste_categories');
+        return $this->redirectToRoute('Categorie/list.html.twig');
     }
 
     
-        public function listCategories() {
-            // Récupération de toutes les catégories depuis la base de données
-            $entityManager = $this->getDoctrine()->getManager();
-            $categories = $entityManager->getRepository(Categorie::class)->findAll();
-    
-            // Affichage de la liste des catégories dans la vue (à adapter selon votre système de templates)
-            return $this->render('templates/categorie.html.twig', ['categories' => $categories]);
-        }
+    public function listCategories(EntityManagerInterface $entityManager): Response
+{
+    // Récupération de toutes les catégories depuis la base de données
+    $categories = $entityManager->getRepository(Categorie::class)->findAll();
+
+    // Affichage de la liste des catégories dans la vue (à adapter selon votre système de templates)
+    return $this->render('Categorie/list.html.twig', ['categories' => $categories]);
+}
+
 }
 ?>

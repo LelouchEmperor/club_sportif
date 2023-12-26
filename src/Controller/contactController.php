@@ -1,35 +1,25 @@
 <?php
 
+namespace App\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Contact;
+use App\Form\ContactType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Doctrine\ORM\EntityManagerInterface;
 
-class contactController extends Controller
+class ContactController extends AbstractController
 {
-    public function createContact(Request $request): Response {
-        // Récupération des données du formulaire
-        $nom = $request->request->get('nom');
-        $prenom = $request->request->get('prenom');
-        $email = $request->request->get('email');
-        $numeroTel = $request->request->get('numero_tel');
 
-        // Validation des données (vous pouvez utiliser des validateurs Symfony)
-
-        // Création d'une nouvelle instance de la classe Contact
-        $nouveauContact = new Contact();
-        $nouveauContact->setNom($nom);
-        $nouveauContact->setPrenom($prenom);
-        $nouveauContact->setEmail($email);
-        $nouveauContact->setNumeroTel($numeroTel);
-
-        // Récupération de l'Entity Manager et sauvegarde du contact
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($nouveauContact);
-        $entityManager->flush();
-
-        // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_contacts');
+    public function createContact(Request $request): Response
+    {
+       
     }
+
+
 
     public function editContact(Request $request, $id): Response {
         // Récupération du contact à modifier depuis la base de données
@@ -72,13 +62,13 @@ class contactController extends Controller
         return $this->redirectToRoute('liste_contacts');
     }
 
-    public function listContacts(): Response {
-        // Récupération de tous les contacts depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $contacts = $entityManager->getRepository(Contact::class)->findAll();
+    public function listContacts(EntityManagerInterface $entityManager): Response
+    {
+        // Récupération de toutes les catégories depuis la base de données
+        $contact = $entityManager->getRepository(Contact::class)->findAll();
 
-        // Affichage de la liste des contacts dans la vue (à adapter selon votre système de templates)
-        return $this->render('contacts/liste.html.twig', ['contacts' => $contacts]);
+        // Affichage de la liste des catégories dans la vue (à adapter selon votre système de templates)
+        return $this->render('Contact/list.html.twig', ['contacts' => $contact]);
     }
 
     

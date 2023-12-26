@@ -1,9 +1,17 @@
 <?php 
 
-class educateurController extends Controller
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Educateur;
+
+
+class EducateurController extends AbstractController
 {
-   
-   
     public function createEducateur(Request $request): Response {
         // Récupération des données du formulaire
         $numeroLicence = $request->request->get('numero_licence');
@@ -30,7 +38,7 @@ class educateurController extends Controller
         $entityManager->flush();
 
         // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_educateurs');
+        return $this->redirectToRoute('educateur');
     }
    
    
@@ -57,7 +65,7 @@ class educateurController extends Controller
         $entityManager->flush();
 
         // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_educateurs');
+        return $this->redirectToRoute('educateur');
     }
    
     public function deleteEducateur($id): Response {
@@ -75,16 +83,16 @@ class educateurController extends Controller
         $entityManager->flush();
 
         // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_educateurs');
+        return $this->redirectToRoute('educateur');
     }
    
-    public function listEducateurs(): Response {
-        // Récupération de tous les éducateurs depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $educateurs = $entityManager->getRepository(Educateur::class)->findAll();
+    public function listEducateurs(EntityManagerInterface $entityManager): Response
+    {
+        // Récupération de toutes les catégories depuis la base de données
+        $educateur = $entityManager->getRepository(Educateur::class)->findAll();
 
-        // Affichage de la liste des éducateurs dans la vue (à adapter selon votre système de templates)
-        return $this->render('educateurs/liste.html.twig', ['educateurs' => $educateurs]);
+        // Affichage de la liste des educateurs dans la vue (à adapter selon votre système de templates)
+        return $this->render('Educateur/list.html.twig', ['educateurs' => $educateur]);
     }
 
 }

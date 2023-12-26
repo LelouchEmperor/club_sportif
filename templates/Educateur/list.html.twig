@@ -1,33 +1,38 @@
-{# templates/categorie/liste.html.twig #}
+{# templates/Educateur/list.html.twig #}
+ 
 
 {% extends 'base.html.twig' %}
 
-{% block content %}
-    <h1>Liste des Catégories</h1>
+{% block title %}Liste des Éducateurs{% endblock %}
+
+{% block body %}
+    <h1>Liste des Éducateurs</h1>
 
     <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nom</th>
-                <th>Code Raccourci</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Numéro de licence</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for categorie in categories %}
+            {% for educateur in educateurs %}
                 <tr>
-                    <td>{{ categorie.id }}</td>
-                    <td>{{ categorie.nom }}</td>
-                    <td>{{ categorie.codeRaccourci }}</td>
+                    <td>{{ educateur.nom }}</td>
+                    <td>{{ educateur.prenom }}</td>
+                    <td>{{ educateur.email }}</td>
+                    <td>{{ educateur.numeroLicence }}</td>
                     <td>
-                        <a href="{{ path('edit_categorie', {'id': categorie.id}) }}">Modifier</a>
-                        <a href="{{ path('delete_categorie', {'id': categorie.id}) }}">Supprimer</a>
+                        <a href="{{ path('educateur_update', {'id': educateur.id}) }}">Modifier</a>
+                        <a href="{{ path('educateur_delete', {'id': educateur.id}) }}">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('create_categorie') }}">Créer une Catégorie</a>
+    <a href="{{ path('educateur_create') }}">Créer un Éducateur</a>
 {% endblock %}

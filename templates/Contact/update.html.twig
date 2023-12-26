@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un Contact{% endblock %}
+
+{% block body %}
+    <h1>Modifier un Contact</h1>
+
+    {# Le formulaire pour modifier un contact #}
+    <form method="post" action="{{ path('modifier_contact', {'id': contact.id}) }}">
+        {{ form_start(form) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.prenom) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.telephone) }}
+
+        {# Le bouton pour soumettre le formulaire #}
+        <button type="submit">Sauvegarder les Modifications</button>
+        {{ form_end(form) }}
+
+        {# Le bouton pour revenir à la liste des contacts #}
+        <a href="{{ path('Contact/list') }}">Retour à la liste des Contacts</a>
+    </form>
+{% endblock %}
