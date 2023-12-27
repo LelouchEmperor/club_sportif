@@ -1,12 +1,14 @@
+{# templates/licencie/edit.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un Licencié{% endblock %}
+{% block title %}Modifier un Licencié{% endblock %}
 
 {% block body %}
-    <h1>Créer un Licencié</h1>
+    <h1>Modifier un Licencié</h1>
 
-    {# Le formulaire pour créer un licencié #}
-    <form method="post" action="{{ path('licencie_create') }}">
+    {# Le formulaire pour modifier un licencié #}
+    <form method="post">
         {{ form_start(form) }}
         {{ form_row(form.numeroLicence) }}
         {{ form_row(form.nom) }}
@@ -16,7 +18,7 @@
         {{ form_row(form.educateur) }}
 
         {# Le bouton pour soumettre le formulaire #}
-        <button type="submit">Créer le Licencié</button>
+        <button type="submit">Modifier le Licencié</button>
         {{ form_end(form) }}
 
         {# Le bouton pour revenir à la liste des licenciés #}

@@ -1,0 +1,23 @@
+{# templates/creer_categorie.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une Catégorie{% endblock %}
+
+{% block body %}
+    <h1>Créer une Catégorie</h1>
+
+    {# Le formulaire pour créer une catégorie #}
+    <form method="post" action="{{ path('categorie_create') }}">
+        {{ form_start(form) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.codeRaccourci) }}
+
+        {# Le bouton pour soumettre le formulaire #}
+        <button type="submit">Créer la Catégorie</button>
+        {{ form_end(form) }}
+
+        {# Le bouton pour revenir à la liste des catégories #}
+        <a href="{{ path('categorie') }}">Retour à la liste des Catégories</a>
+    </form>
+{% endblock %}

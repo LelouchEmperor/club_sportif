@@ -1,88 +1,88 @@
 <?php
 
+namespace App\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Contact;
+use App\Form\ContactType;
 
-class contactController extends Controller
+class ContactController extends AbstractController
 {
-    public function createContact(Request $request): Response {
-        // Récupération des données du formulaire
-        $nom = $request->request->get('nom');
-        $prenom = $request->request->get('prenom');
-        $email = $request->request->get('email');
-        $numeroTel = $request->request->get('numero_tel');
+    private $entityManager;
 
-        // Validation des données (vous pouvez utiliser des validateurs Symfony)
-
-        // Création d'une nouvelle instance de la classe Contact
-        $nouveauContact = new Contact();
-        $nouveauContact->setNom($nom);
-        $nouveauContact->setPrenom($prenom);
-        $nouveauContact->setEmail($email);
-        $nouveauContact->setNumeroTel($numeroTel);
-
-        // Récupération de l'Entity Manager et sauvegarde du contact
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($nouveauContact);
-        $entityManager->flush();
-
-        // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_contacts');
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
     }
 
-    public function editContact(Request $request, $id): Response {
-        // Récupération du contact à modifier depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $contact = $entityManager->getRepository(Contact::class)->find($id);
+    #[Route('/contact/create', name: 'contact_create', methods: ['GET', 'POST'])]
+    public function createContact(Request $request): Response
+    {
+        $contact = new Contact();
+        $form = $this->createForm(ContactType::class, $contact);
 
-        // Validation si le contact existe
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->persist($contact);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('contact');
+        }
+
+        return $this->render('contact/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/contact/edit/{id}', name: 'contact_edit', methods: ['GET', 'POST'])]
+    public function editContact(Request $request, $id): Response
+    {
+        $contact = $this->entityManager->getRepository(Contact::class)->find($id);
+
         if (!$contact) {
             throw $this->createNotFoundException('Contact non trouvé');
         }
 
-        // Mise à jour des propriétés du contact
-        $contact->setNom($request->request->get('nom'));
-        $contact->setPrenom($request->request->get('prenom'));
-        $contact->setEmail($request->request->get('email'));
-        $contact->setNumeroTel($request->request->get('numero_tel'));
+        $form = $this->createForm(ContactType::class, $contact);
 
-        // Enregistrement des modifications
-        $entityManager->flush();
+        $form->handleRequest($request);
 
-        // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_contacts');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('contact');
+        }
+
+        return $this->render('Contact/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    public function deleteContact($id): Response {
-        // Récupération du contact à supprimer depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $contact = $entityManager->getRepository(Contact::class)->find($id);
+    #[Route('/contact/delete/{id}', name: 'contact_delete')]
+    public function deleteContact($id): Response
+    {
+        $contact = $this->entityManager->getRepository(Contact::class)->find($id);
 
-        // Validation si le contact existe
         if (!$contact) {
             throw $this->createNotFoundException('Contact non trouvé');
         }
 
-        // Suppression du contact
-        $entityManager->remove($contact);
-        $entityManager->flush();
+        $this->entityManager->remove($contact);
+        $this->entityManager->flush();
 
-        // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_contacts');
+        return $this->redirectToRoute('contact');
     }
 
-    public function listContacts(): Response {
-        // Récupération de tous les contacts depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $contacts = $entityManager->getRepository(Contact::class)->findAll();
-
-        // Affichage de la liste des contacts dans la vue (à adapter selon votre système de templates)
-        return $this->render('contacts/liste.html.twig', ['contacts' => $contacts]);
-    }
-
+    #[Route('/Contact/list', name: 'contact')]
+    public function listContacts(EntityManagerInterface $entityManager): Response
+    {
+        $contact = $entityManager->getRepository(Contact::class)->findAll();
     
+        return $this->render('Contact/list.html.twig', ['contacts' => $contact]);
+    }
 }
-
-
-

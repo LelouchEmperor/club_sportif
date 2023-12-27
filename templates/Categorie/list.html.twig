@@ -1,6 +1,3 @@
-{# templates/categorie/liste.html.twig #}
-
-{% extends 'base.html.twig' %}
 
 {% block content %}
     <h1>Liste des Catégories</h1>
@@ -21,13 +18,13 @@
                     <td>{{ categorie.nom }}</td>
                     <td>{{ categorie.codeRaccourci }}</td>
                     <td>
-                        <a href="{{ path('edit_categorie', {'id': categorie.id}) }}">Modifier</a>
-                        <a href="{{ path('delete_categorie', {'id': categorie.id}) }}">Supprimer</a>
+                        <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">Modifier</a>
+                        <a href="{{ path('categorie_delete', {'id': categorie.id}) }}">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('create_categorie') }}">Créer une Catégorie</a>
+    <a href="{{ path('categorie_create') }}">Créer une Catégorie</a>
 {% endblock %}

@@ -4,70 +4,86 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-index:
-path: /
-controller: App\Controller\TestController::index
-
+# LICENCIE
 licencie:
     path: '/licencie'
     controller: 'App\Controller\LicencieController::listLicencies'
+    methods: ['GET']
 
 licencie_create:
     path: '/licencie/create'
     controller: 'App\Controller\LicencieController::createLicencie'
+    methods: ['GET', 'POST']
 
 licencie_edit:
     path: '/licencie/{id}/edit'
     controller: 'App\Controller\LicencieController::editLicencie'
+    methods: ['GET', 'POST']
 
 licencie_delete:
     path: '/licencie/{id}/delete'
     controller: 'App\Controller\LicencieController::deleteLicencie'
+    methods: ['GET', 'POST']
 
+# EDUCATEUR
 educateur:
     path: '/educateur'
     controller: 'App\Controller\EducateurController::listEducateurs'
+    methods: ['GET']
 
 educateur_create:
     path: '/educateur/create'
     controller: 'App\Controller\EducateurController::createEducateur'
+    methods: ['GET', 'POST']
 
 educateur_edit:
     path: '/educateur/{id}/edit'
     controller: 'App\Controller\EducateurController::editEducateur'
+    methods: ['GET', 'POST']
 
 educateur_delete:
     path: '/educateur/{id}/delete'
     controller: 'App\Controller\EducateurController::deleteEducateur'
+    methods: ['GET', 'POST']
 
-categorie:
-    path: '/categorie'
-    controller: 'App\Controller\CategorieController::listCategories'
-
-categorie_create:
-    path: '/categorie/create'
-    controller: 'App\Controller\CategorieController::createCategorie'
-
-categorie_edit:
-    path: '/categorie/{id}/edit'
-    controller: 'App\Controller\CategorieController::editCategorie'
-
-categorie_delete:
-    path: '/categorie/{id}/delete'
-    controller: 'App\Controller\CategorieController::deleteCategorie'
-
+# CONTACT
 contact:
     path: '/contact'
     controller: 'App\Controller\ContactController::listContacts'
+    methods: ['GET']
 
 contact_create:
     path: '/contact/create'
     controller: 'App\Controller\ContactController::createContact'
+    methods: ['GET', 'POST']
 
 contact_edit:
     path: '/contact/{id}/edit'
     controller: 'App\Controller\ContactController::editContact'
+    methods: ['GET', 'POST']
 
 contact_delete:
     path: '/contact/{id}/delete'
     controller: 'App\Controller\ContactController::deleteContact'
+    methods: ['GET', 'POST']
+
+# CATEGORIE 
+categorie:
+    path: '/categorie'
+    controller: 'App\Controller\CategorieController::listCategories'
+    methods: ['GET']
+
+categorie_create:
+    path: '/categorie/create'
+    controller: 'App\Controller\CategorieController::createCategorie'
+    methods: ['GET', 'POST']
+
+categorie_edit:
+    path: '/categorie/{id}/edit'
+    controller: 'App\Controller\CategorieController::editCategorie'
+    methods: ['GET', 'POST']
+
+categorie_delete:
+    path: '/categorie/{id}/delete'
+    controller: 'App\Controller\CategorieController::deleteCategorie'
+    methods: ['GET', 'POST']

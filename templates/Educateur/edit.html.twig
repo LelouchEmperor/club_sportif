@@ -1,24 +1,22 @@
-{# templates/educateur/create.html.twig #}
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un Éducateur{% endblock %}
+{% block title %}Modifier un Éducateur{% endblock %}
 
 {% block body %}
-    <h1>Créer un Éducateur</h1>
+    <h1>Modifier un Éducateur</h1>
 
-    {# Le formulaire pour créer un éducateur #}
-    <form method="post" action="{{ path('educateur_create') }}">
+    {# Le formulaire pour modifier un éducateur #}
+    <form method="post">
         {{ form_start(form) }}
         {{ form_row(form.numeroLicence) }}
         {{ form_row(form.nom) }}
         {{ form_row(form.prenom) }}
-        {{ form_row(form.contact) }}
         {{ form_row(form.email) }}
         {{ form_row(form.motDePasse) }}
+        {{ form_row(form.contact)}}
 
         {# Le bouton pour soumettre le formulaire #}
-        <button type="submit">Créer l'Éducateur</button>
+        <button type="submit">Sauvegarder les Modifications</button>
         {{ form_end(form) }}
 
         {# Le bouton pour revenir à la liste des éducateurs #}

@@ -1,91 +1,106 @@
 <?php
+namespace App\Controller;
 
-#[Route('/licencie')] // Route pour accéder aux licencies
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Licencie;
+use App\Form\LicencieType;
 
-class licencieController extends Controller
+
+class LicencieController extends AbstractController
 {
 
-    public function createLicencie(Request $request): Response {
-        // Récupération des données du formulaire
-        $numeroLicence = $request->request->get('numero_licence');
-        $nom = $request->request->get('nom');
-        $prenom = $request->request->get('prenom');
-        $contact = $request->request->get('contact');
-        $categorie = $request->request->get('categorie');
-        $educateur = $request->request->get('educateur');
+    private $entityManager;
 
-        // Validation des données (vous pouvez utiliser des validateurs Symfony)
-
-        // Création d'une nouvelle instance de la classe Licencie
-        $nouveauLicencie = new Licencie();
-        $nouveauLicencie->setNumeroLicence($numeroLicence);
-        $nouveauLicencie->setNom($nom);
-        $nouveauLicencie->setPrenom($prenom);
-        $nouveauLicencie->setContact($contact);
-        $nouveauLicencie->setCategorie($categorie);
-        $nouveauLicencie->setEducateur($educateur);
-
-        // Récupération de l'Entity Manager et sauvegarde du licencié
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($nouveauLicencie);
-        $entityManager->flush();
-
-        // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_licencies');
+    // Injection de dépendance de l'EntityManagerInterface dans le constructeur
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
     }
 
-    public function editLicencie(Request $request, $id): Response {
-        // Récupération du licencié à modifier depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $licencie = $entityManager->getRepository(Licencie::class)->find($id);
+    #[Route('/create', name: 'create_licencie', methods: ['GET', 'POST'])]
+    public function createLicencie(Request $request): Response
+{
+    // Créer une instance de l'entité Licencie
+    $licencie = new Licencie();
 
-        // Validation si le licencié existe
-        if (!$licencie) {
-            throw $this->createNotFoundException('Licencié non trouvé');
-        }
+    // Créer le formulaire en utilisant la classe de formulaire (LicencieType)
+    $form = $this->createForm(LicencieType::class, $licencie);
 
-        // Mise à jour des propriétés du licencié
-        $licencie->setNumeroLicence($request->request->get('numero_licence'));
-        $licencie->setNom($request->request->get('nom'));
-        $licencie->setPrenom($request->request->get('prenom'));
-        $licencie->setContact($request->request->get('contact'));
-        $licencie->setCategorie($request->request->get('categorie'));
-        $licencie->setEducateur($request->request->get('educateur'));
+    // Gérez la soumission du formulaire
+    $form->handleRequest($request);
 
-        // Enregistrement des modifications
-        $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Enregistrez le licencié dans la base de données
+        $this->entityManager->persist($licencie);
+        $this->entityManager->flush();
 
-        // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_licencies');
+        // Redirigez vers la liste des licenciés
+        return $this->redirectToRoute('licencie');
     }
 
+    // Affichez le formulaire dans le template
+    return $this->render('Licencie/create.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+    
+    /**
+     * @Route("/licencie/edit/{id}", name="edit_licencie", methods={"POST"})
+     */
+    public function editLicencie(Request $request, $id): Response
+{
+    $entityManager = $this->entityManager;
+    $licencie = $entityManager->getRepository(Licencie::class)->find($id);
+
+    if (!$licencie) {
+        throw $this->createNotFoundException('Licencié non trouvé');
+    }
+
+    $form = $this->createForm(LicencieType::class, $licencie);
+
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+        // Redirection vers la liste des licenciés
+        return $this->redirectToRoute('licencie');
+    }
+
+    return $this->render('licencie/edit.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
+    /**
+     * @Route("/licencie/delete/{id}", name="delete_licencie")
+     */
     public function deleteLicencie($id): Response {
-        // Récupération du licencié à supprimer depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->entityManager;
         $licencie = $entityManager->getRepository(Licencie::class)->find($id);
 
-        // Validation si le licencié existe
         if (!$licencie) {
             throw $this->createNotFoundException('Licencié non trouvé');
         }
 
-        // Suppression du licencié
         $entityManager->remove($licencie);
         $entityManager->flush();
 
-        // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_licencies');
+        return $this->redirectToRoute('licencie');
     }
 
-    public function listLicencies(): Response {
-        // Récupération de tous les licenciés depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $licencies = $entityManager->getRepository(Licencie::class)->findAll();
+    /**
+     * @Route("/licencie/list", name="liste_licencies")
+     */
+    public function listLicencies(EntityManagerInterface $entityManager): Response
+    {
+        // Récupération de toutes les catégories depuis la base de données
+        $licencie = $entityManager->getRepository(Licencie::class)->findAll();
 
-        // Affichage de la liste des licenciés dans la vue (à adapter selon votre système de templates)
-        return $this->render('licencies/liste.html.twig', ['licencies' => $licencies]);
+        // Affichage de la liste des educateurs dans la vue (à adapter selon votre système de templates)
+        return $this->render('Licencie/list.html.twig', ['licencies' => $licencie]);
     }
-
-
-
 }

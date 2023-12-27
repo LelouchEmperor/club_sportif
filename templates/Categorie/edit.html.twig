@@ -1,0 +1,23 @@
+{# templates/modifier_categorie.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une Catégorie{% endblock %}
+
+{% block body %}
+    <h1>Modifier une Catégorie</h1>
+
+    {# Le formulaire pour modifier une catégorie #}
+    <form method="post">
+        {{ form_start(form) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.codeRaccourci) }}
+
+        {# Le bouton pour soumettre le formulaire #}
+        <button type="submit">Sauvegarder</button>
+        {{ form_end(form) }}
+
+        {# Le bouton pour revenir à la liste des catégories #}
+        <a href="{{ path('categorie') }}">Retour à la liste des Catégories</a>
+    </form>
+{% endblock %}

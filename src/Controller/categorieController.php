@@ -1,82 +1,88 @@
 <?php
 
+namespace App\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Categorie;
+use App\Form\CategorieType;
 
+class CategorieController extends AbstractController
+{
+    private $entityManager;
 
-class CategorieController extends Controller {
-    public function createCategorie($nom, $codeRaccourci) {
-        // Faudra regarder si les paramètres sont bien renseignés et correctes
-
-        // Création d'une nouvelle instance de la classe Categorie
-        $nouvelleCategorie = new Categorie();
-        $nouvelleCategorie->setNom($nom);
-        $nouvelleCategorie->setCodeRaccourci($codeRaccourci);
-
-        // Récupération de l'Entity Manager (EntityManager) pour interagir avec la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-
-        // Persistez l'objet en base de données
-        $entityManager->persist($nouvelleCategorie);
-
-        // Exécution des opérations en base de données
-        $entityManager->flush();
-
-        // Redirection vers la liste des catégories 
-        return $this->redirectToRoute('liste_categories');
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
     }
 
+    #[Route('/categorie/create', name: 'categorie_create', methods: ['GET', 'POST'])]
+    public function createCategorie(Request $request): Response
+    {
+        $categorie = new categorie();
+        $form = $this->createForm(categorieType::class, $categorie);
 
-    public function editCategorie($id, $nom, $codeRaccourci) {
-        // Validation des données
+        $form->handleRequest($request);
 
-        // Récupération de la catégorie à modifier depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $categorie = $entityManager->getRepository(Categorie::class)->find($id);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->persist($categorie);
+            $this->entityManager->flush();
 
-        // Vérification si la catégorie existe
+            return $this->redirectToRoute('categorie');
+        }
+
+        return $this->render('categorie/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/categorie/edit/{id}', name: 'categorie_edit', methods: ['GET', 'POST'])]
+    public function editCategorie(Request $request, $id): Response
+    {
+        $categorie = $this->entityManager->getRepository(Categorie::class)->find($id);
+
         if (!$categorie) {
-            throw $this->createNotFoundException('Catégorie non trouvée');
+            throw $this->createNotFoundException('categorie non trouvé');
         }
 
-        // Modification des propriétés de la catégorie
-        $categorie->setNom($nom);
-        $categorie->setCodeRaccourci($codeRaccourci);
+        $form = $this->createForm(categorieType::class, $categorie);
 
-        // Enregistrement des modifications en base de données
-        $entityManager->flush();
+        $form->handleRequest($request);
 
-        // Redirection vers la liste des catégories 
-        return $this->redirectToRoute('liste_categories');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('categorie');
+        }
+
+        return $this->render('categorie/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    public function deleteCategorie($id) {
-        // Récupération de la catégorie à supprimer depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $categorie = $entityManager->getRepository(Categorie::class)->find($id);
+    #[Route('/categorie/delete/{id}', name: 'categorie_delete')]
+    public function deleteCategorie($id): Response
+    {
+        $categorie = $this->entityManager->getRepository(Categorie::class)->find($id);
 
-        // Vérification si la catégorie existe
         if (!$categorie) {
-            throw $this->createNotFoundException('Catégorie non trouvée');
+            throw $this->createNotFoundException('categorie non trouvé');
         }
 
-        // Suppression de la catégorie
-        $entityManager->remove($categorie);
-        $entityManager->flush();
+        $this->entityManager->remove($categorie);
+        $this->entityManager->flush();
 
-        // Redirection vers la liste des catégories (ou autre action appropriée)
-        return $this->redirectToRoute('liste_categories');
+        return $this->redirectToRoute('categorie');
     }
 
+    #[Route('/categorie/list', name: 'categorie')]
+    public function listcategories(EntityManagerInterface $entityManager): Response
+    {
+        $categorie = $entityManager->getRepository(Categorie::class)->findAll();
     
-        public function listCategories() {
-            // Récupération de toutes les catégories depuis la base de données
-            $entityManager = $this->getDoctrine()->getManager();
-            $categories = $entityManager->getRepository(Categorie::class)->findAll();
-    
-            // Affichage de la liste des catégories dans la vue (à adapter selon votre système de templates)
-            return $this->render('templates/categorie.html.twig', ['categories' => $categories]);
-        }
+        return $this->render('categorie/list.html.twig', ['categories' => $categorie]);
+    }
 }
-?>
