@@ -6,73 +6,83 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Contact;
 use App\Form\ContactType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Doctrine\ORM\EntityManagerInterface;
 
 class ContactController extends AbstractController
 {
+    private $entityManager;
 
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    #[Route('/contact/create', name: 'contact_create', methods: ['GET', 'POST'])]
     public function createContact(Request $request): Response
     {
-       
+        $contact = new Contact();
+        $form = $this->createForm(ContactType::class, $contact);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->persist($contact);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('contact');
+        }
+
+        return $this->render('contact/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
+    #[Route('/contact/edit/{id}', name: 'contact_edit', methods: ['GET', 'POST'])]
+    public function editContact(Request $request, $id): Response
+    {
+        $contact = $this->entityManager->getRepository(Contact::class)->find($id);
 
-
-    public function editContact(Request $request, $id): Response {
-        // Récupération du contact à modifier depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $contact = $entityManager->getRepository(Contact::class)->find($id);
-
-        // Validation si le contact existe
         if (!$contact) {
             throw $this->createNotFoundException('Contact non trouvé');
         }
 
-        // Mise à jour des propriétés du contact
-        $contact->setNom($request->request->get('nom'));
-        $contact->setPrenom($request->request->get('prenom'));
-        $contact->setEmail($request->request->get('email'));
-        $contact->setNumeroTel($request->request->get('numero_tel'));
+        $form = $this->createForm(ContactType::class, $contact);
 
-        // Enregistrement des modifications
-        $entityManager->flush();
+        $form->handleRequest($request);
 
-        // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_contacts');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('contact');
+        }
+
+        return $this->render('Contact/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    public function deleteContact($id): Response {
-        // Récupération du contact à supprimer depuis la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $contact = $entityManager->getRepository(Contact::class)->find($id);
+    #[Route('/contact/delete/{id}', name: 'contact_delete')]
+    public function deleteContact($id): Response
+    {
+        $contact = $this->entityManager->getRepository(Contact::class)->find($id);
 
-        // Validation si le contact existe
         if (!$contact) {
             throw $this->createNotFoundException('Contact non trouvé');
         }
 
-        // Suppression du contact
-        $entityManager->remove($contact);
-        $entityManager->flush();
+        $this->entityManager->remove($contact);
+        $this->entityManager->flush();
 
-        // Redirection ou réponse en fonction de vos besoins
-        return $this->redirectToRoute('liste_contacts');
+        return $this->redirectToRoute('contact');
     }
 
+    #[Route('/Contact/list', name: 'contact')]
     public function listContacts(EntityManagerInterface $entityManager): Response
     {
-        // Récupération de toutes les catégories depuis la base de données
         $contact = $entityManager->getRepository(Contact::class)->findAll();
-
-        // Affichage de la liste des catégories dans la vue (à adapter selon votre système de templates)
+    
         return $this->render('Contact/list.html.twig', ['contacts' => $contact]);
     }
-
-    
 }
-
-
-
