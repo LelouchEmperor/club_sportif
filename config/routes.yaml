@@ -40,7 +40,7 @@ educateur_delete:
     path: '/educateur/{id}/delete'
     controller: 'App\Controller\EducateurController::deleteEducateur'
 
-    categorie:
+categorie:
     path: '/categorie'
     controller: 'App\Controller\CategorieController::listCategories'
 

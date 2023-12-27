@@ -1,0 +1,19 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de Bord{% endblock %}
+
+{% block body %}
+    <h1>Tableau de Bord</h1>
+
+    {% if app.user and app.user.isAdmin %}
+        <ul>
+            <li><a href="{{ path('categorie') }}">Liste des Catégories</a></li>
+            <li><a href="{{ path('contact') }}">Liste des Contacts</a></li>
+            <li><a href="{{ path('educateur') }}">Liste des Éducateurs</a></li>
+            <li><a href="{{ path('licencie') }}">Liste des Licenciés</a></li>
+        </ul>
+    {% else %}
+        <p>Accès non autorisé. Vous devez être connecté en tant qu'éducateur admin.</p>
+    {% endif %}
+{% endblock %}
