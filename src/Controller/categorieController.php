@@ -79,7 +79,7 @@ class CategorieController extends AbstractController
     }
 
     #[Route('/categorie/list', name: 'categorie')]
-    public function listcategories(EntityManagerInterface $entityManager): Response
+    public function listCategories(EntityManagerInterface $entityManager): Response
     {
         $categorie = $entityManager->getRepository(Categorie::class)->findAll();
     
