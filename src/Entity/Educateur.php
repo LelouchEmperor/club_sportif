@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use App\Repository\EducateurRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EducateurRepository::class)]
-class Educateur
+class Educateur implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,8 +29,11 @@ class Educateur
     #[ORM\Column(length: 75)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 75)]
+    #[ORM\Column(type: 'string', length: 50)]
     private ?string $motDePasse = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $isAdmin = false;
 
     public function getId(): ?int
     {
@@ -113,5 +117,46 @@ class Educateur
         $this->motDePasse = $motDePasse;
 
         return $this;
+    }
+
+    public function getIsAdmin(): ?bool
+    {
+        return $this->isAdmin;
+    }
+
+    public function setIsAdmin(bool $isAdmin): static
+    {
+        $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        // Si l'éducateur a l'attribut isAdmin à true, donnez-lui le rôle 'ROLE_ADMIN'
+        return $this->isAdmin ? ['ROLE_ADMIN'] : ['ROLE_USER'];
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+        // Vous pouvez également utiliser une autre propriété qui identifie de manière unique l'utilisateur.
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->motDePasse;
+    }
+
+    public function getSalt(): ?string
+    {
+        // Vous n'avez pas besoin de sel si vous utilisez un hachage moderne comme Bcrypt.
+        return null;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Méthode appelée lors de l'effacement des informations d'identification sensibles.
+        // Dans la plupart des cas, cela ne nécessite aucune action.
     }
 }

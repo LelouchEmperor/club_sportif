@@ -18,6 +18,7 @@ class EducateurType extends AbstractType
             ->add('contact')
             ->add('email')
             ->add('motDePasse')
+            ->add('isAdmin')
         ;
     }
 

@@ -24,20 +24,25 @@ class EducateurController extends AbstractController
     {
         $educateur = new Educateur();
         $form = $this->createForm(EducateurType::class, $educateur);
-
+    
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
+            // Hasher le mot de passe avec password_hash
+            $hashedPassword = password_hash($educateur->getMotDePasse(), PASSWORD_BCRYPT);
+            $educateur->setMotDePasse($hashedPassword);
+    
             $this->entityManager->persist($educateur);
             $this->entityManager->flush();
-
-            return $this->redirectToRoute('educateur');
+    
+            return $this->redirectToRoute('dashboard');
         }
-
-        return $this->render('Educateur/create.html.twig', [
+    
+        return $this->render('Authentification/login.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+    
 
     #[Route('/Educateur/edit/{id}', name: 'educateur_edit', methods: ['GET', 'POST'])]
     public function editEducateur(Request $request, $id): Response

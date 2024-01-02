@@ -87,3 +87,15 @@ categorie_delete:
     path: '/categorie/{id}/delete'
     controller: 'App\Controller\CategorieController::deleteCategorie'
     methods: ['GET', 'POST']
+
+# Page centrale 
+dashboard:
+    path: '/dashboard'
+    controller: 'App\Controller\DashboardController::index'
+    methods: ['GET']
+
+# Authentification 
+login:
+    path: /login
+    controller: App\Controller\LoginController::login
+

@@ -25,6 +25,8 @@
                     <td>{{ educateur.prenom }}</td>
                     <td>{{ educateur.email }}</td>
                     <td>{{ educateur.numeroLicence }}</td>
+                    <td>{{ educateur.isAdmin == 1 ? 'true' : 'false' }}</td>
+
                     <td>
                         <a href="{{ path('educateur_edit', {'id': educateur.id}) }}">Modifier</a>
                         <a href="{{ path('educateur_delete', {'id': educateur.id}) }}">Supprimer</a>

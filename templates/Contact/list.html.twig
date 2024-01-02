@@ -1,35 +1,39 @@
-{# templates/Categorie/list.html.twig #}
+{# templates/Contact/list.html.twig #}
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des Catégories{% endblock %}
+{% block title %}Liste des Contacts{% endblock %}
 
 {% block body %}
-    <h1>Liste des Catégories</h1>
+    <h1>Liste des Contacts</h1>
 
     <table>
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nom</th>
-                <th>Code Raccourci</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Numéro de Téléphone</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for categorie in categories %}
+            {% for contact in contacts %}
                 <tr>
-                    <td>{{ categorie.id }}</td>
-                    <td>{{ categorie.nom }}</td>
-                    <td>{{ categorie.codeRaccourci }}</td>
+                    <td>{{ contact.id }}</td>
+                    <td>{{ contact.nom }}</td>
+                    <td>{{ contact.prenom }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.numeroTel }}</td>
                     <td>
-                        <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">Modifier</a>
-                        <a href="{{ path('categorie_delete', {'id': categorie.id}) }}">Supprimer</a>
+                        <a href="{{ path('contact_edit', {'id': contact.id}) }}">Modifier</a>
+                        <a href="{{ path('contact_delete', {'id': contact.id}) }}">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('categorie_create') }}">Créer une Catégorie</a>
+    <a href="{{ path('contact_create') }}">Créer un Contact</a>
 {% endblock %}
