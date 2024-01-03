@@ -99,3 +99,7 @@ login:
     path: /login
     controller: App\Controller\LoginController::login
 
+# Recherche licencié
+recherche_licencie:
+    path: '/recherche-licencie'
+    controller: 'App\Controller\RechercheLicencieController::rechercheLicencie'

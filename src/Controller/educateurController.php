@@ -32,6 +32,9 @@ class EducateurController extends AbstractController
             $hashedPassword = password_hash($educateur->getMotDePasse(), PASSWORD_BCRYPT);
             $educateur->setMotDePasse($hashedPassword);
     
+            // Si isAdmin est coché dans le formulaire, l'utilisateur obtiendra le rôle ROLE_ADMIN
+            $educateur->setIsAdmin($form->get('isAdmin')->getData());
+    
             $this->entityManager->persist($educateur);
             $this->entityManager->flush();
     
@@ -42,7 +45,6 @@ class EducateurController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    
 
     #[Route('/Educateur/edit/{id}', name: 'educateur_edit', methods: ['GET', 'POST'])]
     public function editEducateur(Request $request, $id): Response

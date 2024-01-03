@@ -22,6 +22,8 @@ class LoginController extends AbstractController
     }
 
     #[Route('/login', name: 'app_login')]
+    #[IsGranted('ROLE_ADMIN')]
+
     public function login(Request $request): Response
     {
         if ($request->getMethod() === 'POST') {
@@ -45,8 +47,6 @@ class LoginController extends AbstractController
                 throw new \Exception('getRoles did not return an array: ' . gettype($roles));
             }
 
-            
-            
             $token = new UsernamePasswordToken($user, '', 'main', $roles);
             $this->get('security.token_storage')->setToken($token);
 

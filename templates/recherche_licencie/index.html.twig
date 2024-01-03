@@ -1,0 +1,21 @@
+{# templates/recherche_licencie/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats de la recherche{% endblock %}
+
+{% block body %}
+    <h1>Résultats de la recherche</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.categorie) }}
+    {# Ajoutez d'autres champs si nécessaire #}
+    <button type="submit">Rechercher</button>
+    {{ form_end(form) }}
+
+    <ul>
+        {% for licencie in resultats %}
+            <li>{{ licencie.nom }} - {{ licencie.prenom }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

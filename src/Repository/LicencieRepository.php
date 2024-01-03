@@ -45,4 +45,14 @@ class LicencieRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+public function rechercherParCategorie(string $categorie)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.categorie = :categorie')
+            ->setParameter('categorie', $categorie)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

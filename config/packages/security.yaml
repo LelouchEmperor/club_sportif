@@ -1,5 +1,6 @@
+# security.yaml
 security:
-    encoders:
+    password_hashers:
         App\Entity\Educateur:
             algorithm: auto
 
@@ -10,17 +11,27 @@ security:
                 property: email
 
     firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
         main:
             pattern: ^/
-            anonymous: lazy
             provider: app_user_provider
             form_login:
                 login_path: app_login
                 check_path: app_login
+                default_target_path: /dashboard   # Redirection après la connexion réussie
+
             logout:
                 path: app_logout
-                target: app_homepage
+
 
     access_control:
-        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: ROLE_ADMIN }
+    - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/, roles: ROLE_ADMIN }
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+
+    # ...
