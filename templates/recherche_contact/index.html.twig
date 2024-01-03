@@ -1,0 +1,20 @@
+{# templates/recherche_contact/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des contacts de la catégorie{% endblock %}
+
+{% block body %}
+    <h1>Liste des contacts de la catégorie</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.categorie) }}
+    <button type="submit">Rechercher</button>
+    {{ form_end(form) }}
+
+    <ul>
+        {% for contact in contacts %}
+            <li>{{ contact.nom }} {{ contact.prenom }} - {{ contact.email }} - {{ contact.numeroTel }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

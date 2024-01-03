@@ -103,3 +103,9 @@ login:
 recherche_licencie:
     path: '/recherche-licencie'
     controller: 'App\Controller\RechercheLicencieController::rechercheLicencie'
+
+# Recherche contact
+recherche_contact:
+    path: '/recherche-contact/'
+    controller: 'App\Controller\RechercheContactController::rechercheContact'
+    methods: ['GET']

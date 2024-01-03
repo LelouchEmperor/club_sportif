@@ -5,30 +5,53 @@ namespace App\Entity;
 use App\Repository\LicencieRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: LicencieRepository::class)]
+/**
+ * @ORM\Entity(repositoryClass=LicencieRepository::class)
+ */
 class Licencie
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column
+     */
     private ?int $id = null;
 
-    #[ORM\Column]
+    /**
+     * @ORM\Column
+     */
     private ?int $numeroLicence = null;
 
-    #[ORM\Column(length: 50)]
+    /**
+     * @ORM\Column(length: 50)
+     */
     private ?string $nom = null;
 
-    #[ORM\Column(length: 50)]
+    /**
+     * @ORM\Column(length: 50)
+     */
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255)]
+    /**
+     * @ORM\Column(length: 255)
+     */
     private ?string $contact = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $categorie = null;
+    /**
+     * @ORM\ManyToOne(targetEntity=Categorie::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Categorie $categorie = null;
 
-    #[ORM\Column(length: 255)]
+    /**
+     * @ORM\ManyToOne(targetEntity=Contact::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Contact $contactEntity = null;
+
+    /**
+     * @ORM\Column(length: 255)
+     */
     private ?string $educateur = null;
 
     public function getId(): ?int
@@ -91,14 +114,26 @@ class Licencie
         return $this;
     }
 
-    public function getCategorie(): ?string
+    public function getCategorie(): ?Categorie
     {
         return $this->categorie;
     }
 
-    public function setCategorie(string $categorie): static
+    public function setCategorie(?Categorie $categorie): static
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getContactEntity(): ?Contact
+    {
+        return $this->contactEntity;
+    }
+
+    public function setContactEntity(?Contact $contactEntity): static
+    {
+        $this->contactEntity = $contactEntity;
 
         return $this;
     }

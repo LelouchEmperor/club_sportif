@@ -55,4 +55,18 @@ public function rechercherParCategorie(string $categorie)
             ->getResult()
         ;
     }
+
+
+    // Exemple dans le repository
+public function getContactsByCategory($categoryId)
+{
+    return $this->createQueryBuilder('l')
+        ->join('l.categorie', 'c')
+        ->join('l.contact', 'ct')
+        ->where('c.id = :categoryId')
+        ->setParameter('categoryId', $categoryId)
+        ->getQuery()
+        ->getResult();
+}
+
 }

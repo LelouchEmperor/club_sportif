@@ -17,18 +17,26 @@ class RechercheLicencieController extends AbstractController
     {
         $form = $this->createForm(RechercheLicencieType::class);
         $form->handleRequest($request);
-
+    
         $resultats = [];
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $categorie = $form->get('categorie')->getData();
-            // Effectuez la recherche en utilisant le repository LicencieRepository
-            $resultats = $licencieRepository->rechercherParCategorie($categorie);
+    
+            // Vérifiez que la catégorie est sélectionnée
+            if ($categorie) {
+                // Effectuez la recherche en utilisant le repository LicencieRepository
+                $resultats = $licencieRepository->rechercherParCategorie($categorie);
+            } else {
+                // Catégorie non sélectionnée, affichez un message d'erreur par exemple
+                $this->addFlash('error', 'Veuillez sélectionner une catégorie pour la recherche.');
+            }
         }
-
+    
         return $this->render('recherche_licencie/index.html.twig', [
             'form' => $form->createView(),
             'resultats' => $resultats,
         ]);
     }
+    
 }

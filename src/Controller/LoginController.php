@@ -22,7 +22,6 @@ class LoginController extends AbstractController
     }
 
     #[Route('/login', name: 'app_login')]
-    #[IsGranted('ROLE_ADMIN')]
 
     public function login(Request $request): Response
     {
